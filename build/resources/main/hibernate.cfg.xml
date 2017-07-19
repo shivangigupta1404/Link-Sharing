@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <!--Database connection settings -->
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/ttndProject</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">password</property>
+
+        <!--JDBC connection pool-->
+        <property name="connection.pool_size">100</property>
+
+        <!-- SQL Dialect-->
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
+
+        <!--echo all executed SQL-->
+        <property name="show_sql">true</property>
+
+        <!--drop or re-create database schema at startup-->
+        <property name="hbm2ddl.auto">update</property>
+
+        <mapping class="entity.DocumentResource"/>
+        <mapping class="entity.LinkResource"/>
+        <mapping class="entity.ReadingItem"/>
+        <mapping class="entity.Resource"/>
+        <mapping class="entity.ResourceRating"/>
+        <mapping class="entity.User"/>
+        <mapping class="entity.Topic"/>
+        <mapping class="entity.Subscription"/>
+
+    </session-factory>
+</hibernate-configuration>
