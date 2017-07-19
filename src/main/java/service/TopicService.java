@@ -1,16 +1,15 @@
 package service;
 
+import dao.SubscriptionDao;
 import dao.TopicDao;
 import dao.UserDao;
-import entity.Resource;
-import entity.Topic;
-import entity.User;
-import entity.Visibility;
+import entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +21,8 @@ public class TopicService {
     TopicDao topicDao;
     @Autowired
     UserDao userDao;
+    @Autowired
+    SubscriptionDao subscriptionDao;
 
     public TopicService(){}
 
@@ -78,9 +79,25 @@ public class TopicService {
         return mv;
     }
 
+
+    public ModelAndView subscribe(String id,String seriousness, HttpSession session) {
+        if(session.getAttribute("username")==null){
+            return new ModelAndView("forward:/","error","Login to subscribe");
+        }
+        if(seriousness=="" || seriousness==null)
+            return new ModelAndView("forward:/showtopic/"+id,"error","Select Seriousness");
+        Topic topic=topicDao.getById(Integer.parseInt(id));
+        User user=userDao.findByUsername((String) session.getAttribute("username"));
+        Date date=new Date();
+        Seriousness seriousness1=Seriousness.valueOf(seriousness);
+        Subscription subscription=new Subscription(topic,user,seriousness1,date);
+        subscriptionDao.save(subscription);
+        return new ModelAndView("forward:/showtopic/"+id,"success","Subscribed!");
+    }
     //SETTER
     public void setTopicDao(TopicDao topicDoa) {
         this.topicDao = topicDoa;
     }
+
 
 }

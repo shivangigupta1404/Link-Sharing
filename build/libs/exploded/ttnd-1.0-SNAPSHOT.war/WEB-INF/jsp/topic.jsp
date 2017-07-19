@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix = "c"%>
 <html>
 <head>
     <title>Topic Page</title>
@@ -49,9 +50,6 @@
                                         </div>
                                         <div class="col-xs-12">
                                             @${topic.createdBy.username}
-                                            <% if(!isCreator){%>
-                                                <a href="#">Subscribe</a>
-                                            <%}%>
                                         </div>
                                         </br>
                                         <div class="col-xs-8">
@@ -62,27 +60,29 @@
                                             <div>Posts</div>
                                             <div>${posts}</div>
                                         </div>
-                                        <div class="col-xs-12">
-                                            <div class="row">
-                                                <div class="col-xs-9 col-sm-offset-2 col-sm-8">
-                                                    <form action="/changetopicprivacy">
-                                                        <% if(isCreator){ %>
-                                                            <div class="form-group">
-                                                            <select name="visibility" >
-                                                                <option value="">--Select Privacy--</option>
-                                                                <option value="Private">private</option>
-                                                                <option value="Public">public</option>
-                                                            </select>
-                                                        </div>
-                                                        <%}%>
-                                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-xs-12">
+                                <div class="row">
+                                    <div class="col-xs-9 col-sm-9">
+                                        <c:if test = "!isCreator">
+                                            <form id="subscribe_topic" action="/subscribe/${topic.id}" method="POST">
+                                                <div class="form-group">
+                                                    <select name="seriousness" >
+                                                        <option value="" selected>--Select Seriousness--</option>
+                                                        <option value="Casual">Casual</option>
+                                                        <option value="Serious">Serious</option>
+                                                        <option value="VerySerious">Very Serious</option>
+                                                    </select>
+                                                    <a onclick="document.getElementById('subscribe_topic').submit();"><u>Subscribe</u></a>
                                                 </div>
-                                                <div class="col-xs-2 col-sm-2">
-                                                    <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
-                                                </div>
-                                            </div>
-                                        </div>
+                                            </form>
+                                        </c:if>
                                     </div>
+                                    <div class="col-xs-2 col-sm-2">
+                                        <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -101,8 +101,9 @@
                                     <div class="col-xs-9 col-sm-9">
                                         <div class="row">
                                             <div class="col-xs-12">
-                                                <strong>${user.name}</strong></br>
-                                                @${user.username}
+                                                <strong><c:out value="${user.firstname}"/> &nbsp;
+                                                    <c:out value="${user.lastname}"/></strong></br>
+                                                @<c:out value="${user.username}"/>
                                                 </br>
                                                 </br>
                                             </div>
@@ -144,7 +145,7 @@
                                     <img src="/resources/images/user.jpg" alt="user" class="img-responsive center-block" class="user-img">
                                 </div>
                                 <div class="col-xs-9 col-sm-10">
-                                    <p>${post.description}</p>
+                                    <p><c:out value="${post.description}"/></p>
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-3 pull-left">
                                             <i class="fa fa-facebook-official" aria-hidden="true"></i>
@@ -152,8 +153,14 @@
                                             <i class="fa fa-google-plus" aria-hidden="true"></i>
                                         </div>
                                         <div class="post_options col-xs-12 col-sm-9 text-right font-sm ">
-                                            <a href="#"><u>Download</u></a>
-                                            <a href="#"><u>View full site</u></a>
+                                            <c:choose>
+                                                <c:when test="${post.url!=null}">
+                                                    <a href="${post.url}"><u>View full site</u></a>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <a href="${post.url}"><u>Download</u></a>
+                                                </c:otherwise>
+                                            </c:choose>
                                             <a href="#"><u>Mark as read</u></a>
                                             <a href="#"><u>View Post</u></a>
                                         </div>
@@ -172,3 +179,6 @@
     <script src="/resources/js/bootstrap.min.js"></script>
 </body>
 </html>
+
+
+

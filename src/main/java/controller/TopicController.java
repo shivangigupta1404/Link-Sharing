@@ -39,17 +39,22 @@ public class TopicController extends ParentController {
         }
     }
 
-    //TO prevent site from crashing if user accidently hit the url
-    @RequestMapping(value="/createTopic",method= RequestMethod.GET)
-    ModelAndView dummy(){
-        return new ModelAndView("redirect:/dashboard");
-    }
 
     @RequestMapping(value="/showtopic/{id}")
     ModelAndView showtopic(@PathVariable String id,HttpSession session) {
         return topicService.showtopic(id,session);
     }
 
+    @RequestMapping(value="/subscribe/{id}",method = RequestMethod.POST)
+    ModelAndView subscribeTopic(@PathVariable String id,@RequestParam(required=false) String seriousness, HttpSession session){
+        return topicService.subscribe(id,seriousness,session);
+    }
+
+    //TO prevent site from crashing if user accidently hit the url
+    @RequestMapping(value={"/createTopic","/subscribe/{id}"},method= RequestMethod.GET)
+    ModelAndView dummy(){
+        return new ModelAndView("redirect:/dashboard");
+    }
 
     //Setter
     public void setTopicService(TopicService topicService) {

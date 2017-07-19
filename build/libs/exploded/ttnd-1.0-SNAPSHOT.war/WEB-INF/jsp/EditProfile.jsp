@@ -141,7 +141,7 @@
                                     <div class="row">
                                         <label class="control-label col-xs-12 col-sm-3" for="edit_password_password">Password * :</label>
                                         <div class="col-xs-12 col-sm-9">
-                                            <input type="password" class="form-control" id="edit_password_password" name="password">
+                                            <input type="password" class="form-control" id="edit_password_password" name="password" required>
                                         </div>
                                     </div>
                                 </div>
@@ -149,7 +149,7 @@
                                     <div class="row">
                                         <label class="control-label col-xs-12 col-sm-3" for="edit_password_confirm">Confirm Password * :</label>
                                         <div class="col-xs-12 col-sm-9">
-                                            <input type="password" class="form-control" id="edit_password_confirm" name="confirmPassword">
+                                            <input type="password" class="form-control" id="edit_password_confirm" name="confirmPassword" required>
                                         </div>
                                     </div>
                                 </div>

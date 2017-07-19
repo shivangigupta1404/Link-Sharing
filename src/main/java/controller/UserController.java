@@ -116,6 +116,12 @@ public class UserController extends ParentController {
     }
 
 
+    //TO prevent site from crashing if user accidently hit the url
+    @RequestMapping(value={"/login","/register"},method= RequestMethod.GET)
+    ModelAndView dummy(){
+        return new ModelAndView("redirect:/dashboard");
+    }
+
     //SETTER
     public void setUserService(UserService userService) {
         this.userService = userService;

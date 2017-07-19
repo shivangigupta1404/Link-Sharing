@@ -48,6 +48,12 @@ public class ResourceController extends ParentController {
         return resourceService.nrecentshare(5);
     }
 
+    //TO prevent site from crashing if user accidently hit the url
+    @RequestMapping(value={"/createlink","/createdocument"},method= RequestMethod.GET)
+    ModelAndView dummy(){
+        return new ModelAndView("redirect:/dashboard");
+    }
+
     //SETTER
     public void setResourceService(ResourceService resourceService) {
         this.resourceService = resourceService;
