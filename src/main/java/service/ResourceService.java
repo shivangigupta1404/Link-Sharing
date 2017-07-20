@@ -5,6 +5,7 @@ import entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.io.BufferedOutputStream;
@@ -82,9 +83,13 @@ public class ResourceService {
         return null;
     }
 
+    public ModelAndView viewpost(String id) {
+        Resource resource=resourceDao.getByid(Integer.parseInt(id));
+        return new ModelAndView("viewPost","post",resource);
+    }
 
     public List<Resource> nrecentshare(int n) {
-        List<Resource> resourceList=resourceDao.nrecentShares(n);
+        List<Resource> resourceList=resourceDao.nrecentPublicShares(n);
         return resourceList;
     }
 
@@ -108,4 +113,5 @@ public class ResourceService {
     public void setResourceDao(ResourceDao resourceDao) {
         this.resourceDao = resourceDao;
     }
+
 }

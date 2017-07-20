@@ -3,6 +3,7 @@ package service;
 import dao.SubscriptionDao;
 import dao.TopicDao;
 import dao.UserDao;
+import dto.UserDto;
 import entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,7 +69,7 @@ public class TopicService {
         Topic topic=topicDao.getById(Integer.parseInt(id));
         int subscriptionCount=topicDao.subscriptionCountOfTopic(topic);
         int postCount=topicDao.postCountOfTopic(topic);
-        List<User> subcribers=topicDao.subscribersOfTopic(topic);
+        List<UserDto> subcribers=subscriptionDao.subscribersOfTopic(topic);
         List<Resource> posts=topicDao.postsOfTopic(topic);
         System.out.println("post count = "+postCount);
         mv.addObject("topic",topic);

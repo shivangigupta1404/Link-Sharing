@@ -37,14 +37,18 @@
                     <div class="col-xs-12 col-sm-9">
                       <div class="row">
                         <div class="col-xs-8">
-                          <c:out value="${resource.createdBy.firstname}"/>
-                          &nbsp;
-                          <c:out value="${resource.createdBy.lastname}"/>
+                          <a href="/profile/${resource.createdBy.id}">
+                            <u>
+                              <c:out value="${resource.createdBy.firstname}"/>
+                              &nbsp;
+                              <c:out value="${resource.createdBy.lastname}"/>
+                            </u>
+                          </a>
                           &nbsp;
                           <span class="grey">@<c:out value="${resource.createdBy.username}"/> 10min</span>
                         </div>
                         <div class="col-xs-4 pull-right text-right">
-                          <a href="/showtopic/${resource.topic.id}"><c:out value="${resource.topic.name}"/></a>
+                          <a href="/showtopic/${resource.topic.id}"><u><c:out value="${resource.topic.name}"/></u></a>
                         </div>
                       </div>
                       <p><c:out value="${resource.description}"/></p>
@@ -55,7 +59,7 @@
                           <i class="fa fa-google-plus fa-2x" aria-hidden="true"></i>
                         </div>
                         <div class="col-xs-3 pull-right text-right">
-                          <a href="<c:out value='${resource.id}'/>"><u>View Post</u></a>
+                          <a href="<c:out value='/viewpost/${resource.id}'/>"><u>View Post</u></a>
                         </div>
                       </div>
                     </div>

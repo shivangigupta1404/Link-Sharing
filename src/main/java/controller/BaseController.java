@@ -33,21 +33,11 @@ public class BaseController extends ParentController {
     ModelAndView index(HttpSession session){
         if(session.getAttribute("username")==null){
             ResourceDao resourceDao=new ResourceDao();
-            List<Resource> resourceList= resourceDao.nrecentShares(5);
+            List<Resource> resourceList= resourceDao.nrecentPublicShares(5);
             return new ModelAndView("index","recentshares",resourceList);
         }
         else {
             return new ModelAndView("redirect:/dashboard");
-        }
-    }
-
-    @RequestMapping("/profile")
-    ModelAndView profile(HttpSession session){
-        if(session.getAttribute("username")!=null){
-            return new ModelAndView("profile");
-        }
-        else{
-            return new ModelAndView("forward:/","error","Login To Continue");
         }
     }
 
@@ -69,6 +59,11 @@ public class BaseController extends ParentController {
         else{
             return new ModelAndView("forward:/","error","Login To Continue");
         }
+    }
+
+    @RequestMapping("/users")
+    ModelAndView users(){
+        return new ModelAndView("allUsers");
     }
 
 }

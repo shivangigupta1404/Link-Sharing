@@ -1,5 +1,6 @@
 package dao;
 
+import com.sun.org.apache.regexp.internal.RE;
 import entity.Resource;
 import entity.Topic;
 import entity.User;
@@ -39,8 +40,15 @@ public class ResourceDao {
         session.close();
     }
 
+    public Resource getByid(int id){
+        openCurrentSessionwithTransaction();
+        Resource resource=getSession().get(Resource.class,id);
+        closeCurrentSessionwithTransaction();
+        return resource;
+    }
+
     @SuppressWarnings("unchecked")
-    public List<Resource> nrecentShares(int n) {
+    public List<Resource> nrecentPublicShares(int n) {
         openCurrentSessionwithTransaction();
         String hql= "From Resource R WHERE R.topic.visibility=0 ORDER BY R.dateCreated DESC";
         Query query = getSession().createQuery(hql);
@@ -49,7 +57,19 @@ public class ResourceDao {
         return resources;
     }
 
-
+    @SuppressWarnings("unchecked")
+    public List<Resource> ResourcesofUser(User creator) {
+        openCurrentSessionwithTransaction();
+        Query query = getSession().createQuery("from Resource R WHERE R.createdBy =?");
+        query.setParameter(0,creator);
+        List<Resource> result = (List<Resource>) query.list();
+        closeCurrentSessionwithTransaction();
+        if(result.isEmpty()){
+            return null;
+        } else {
+            return result;
+        }
+    }
 
     //Getter and Setter
     public Session getSession() {
@@ -75,4 +95,5 @@ public class ResourceDao {
     public void setFactory(SessionFactory factory) {
         this.factory = factory;
     }
+
 }

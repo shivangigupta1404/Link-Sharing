@@ -109,11 +109,11 @@
                                             </div>
                                             <div class="col-xs-8">
                                                 <div>Subscriptions</div>
-                                                <div>50</div>
+                                                <div><c:out value="${user.subscriptionCount}"/></div>
                                             </div>
                                             <div class="col-xs-4">
                                                 <div>Topics</div>
-                                                <div>30</div>
+                                                <div><c:out value="${user.topicCount}"/></div>
                                             </div>
                                         </div>
                                     </div>
@@ -139,6 +139,7 @@
                         </div>
                     </div>
                     <div class="panel-body ">
+                        <c:set var="postsList" value="${postsList}"/>
                         <c:forEach var="post" items="${postsList}">
                             <div class="msg">
                                 <div class="col-xs-3 col-sm-2">
@@ -153,22 +154,29 @@
                                             <i class="fa fa-google-plus" aria-hidden="true"></i>
                                         </div>
                                         <div class="post_options col-xs-12 col-sm-9 text-right font-sm ">
-                                            <c:choose>
-                                                <c:when test="${post.url!=null}">
+                                            <c:catch var="exception">
+                                                <c:set var="url" value="${post.url}" />
+                                                <c:if test="${url ne null}">
                                                     <a href="${post.url}"><u>View full site</u></a>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <a href="${post.url}"><u>Download</u></a>
-                                                </c:otherwise>
-                                            </c:choose>
+                                                </c:if>
+                                            </c:catch>
+                                            <c:catch var="exception">
+                                                <c:set var="filepath" value="${post.filepath}" />
+                                                <c:if test="${filepath ne null}">
+                                                    <a href="${post.filepath}"><u>Download</u></a>
+                                                </c:if>
+                                            </c:catch>
                                             <a href="#"><u>Mark as read</u></a>
-                                            <a href="#"><u>View Post</u></a>
+                                            <a href="/viewpost/${post.id}"><u>View Post</u></a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <hr>
                         </c:forEach>
+                        <c:if test="${postsList eq null}">
+                            <p class="text-center">No Posts Yet</p>
+                        </c:if>
                     </div>
                 </div>
             </div>

@@ -201,7 +201,11 @@
                     <span class="caret"></span></button>
                     <ul class="dropdown-menu">
                         <li><a href="/editprofile">Profile</a></li>
-                        <li><a href="#">Users</a></li>
+                        <% String admin=(String)session.getAttribute("admin");
+                            if(admin.equals("yes")){
+                        %>
+                            <li><a href="/users/">Users</a></li>
+                        <%}%>
                         <li><a href="#">Topics</a></li>
                         <li><a href="#">Posts</a></li>
                         <li><a href="/logout">Logout</a></li>

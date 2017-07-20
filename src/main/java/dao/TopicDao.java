@@ -1,5 +1,7 @@
 package dao;
 
+import dto.TopicDto;
+import dto.TopicDtoMapper;
 import entity.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -7,9 +9,10 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +27,8 @@ public class TopicDao {
     private UserDao userDao;
     @Autowired
     private SubscriptionDao subscriptionDao;
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 
     public TopicDao(){
         Configuration cfg=new Configuration().configure("hibernate.cfg.xml");
@@ -69,8 +74,7 @@ public class TopicDao {
     @SuppressWarnings("unchecked")
     public Topic findByUserAndTopicName(User creator,String topicName) {
         openCurrentSessionwithTransaction();
-        String hql = "from Topic T WHERE name=? and T.createdBy =?";
-        Query query = getSession().createQuery(hql);
+        Query query = getSession().createQuery("from Topic T WHERE name=? and T.createdBy =?");
         query.setParameter(0,topicName);
         query.setParameter(1,creator);
         List<Topic> result = (List<Topic>) query.list();
@@ -106,17 +110,6 @@ public class TopicDao {
     }
 
     @SuppressWarnings("unchecked")
-    public List<User> subscribersOfTopic(Topic topic){
-        openCurrentSessionwithTransaction();
-        String hql = "select S.user FROM Subscription S WHERE S.topic=?";
-        Query query = getSession().createQuery(hql);
-        query.setParameter(0,topic);
-        List<User> subscribers = (List<User>) query.list();
-        closeCurrentSessionwithTransaction();
-        return subscribers;
-    }
-
-    @SuppressWarnings("unchecked")
     public List<Resource> postsOfTopic(Topic topic){
         openCurrentSessionwithTransaction();
         String hql = "FROM Resource R WHERE R.topic=?";
@@ -136,6 +129,20 @@ public class TopicDao {
         int count = query.list().size();
         closeCurrentSessionwithTransaction();
         return count;
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<TopicDto> topicsOfUser(User user) {
+        String sql = "select *,(select count(*) from subscription S where S.topic_id=T.id) as subscriptionCount,"+
+                "(select count(*) from resource R where R.topic_id=T.id) as topicCount from topic T "+
+                "WHERE T.id IN (select id from topic where createdBy_id=1)";
+
+        try {
+            List<TopicDto> users=jdbcTemplate.query(sql,new TopicDtoMapper());
+            return users;
+        }catch(EmptyResultDataAccessException e){
+            return null;
+        }
     }
 
     //GETTER AND SETTER
@@ -169,6 +176,22 @@ public class TopicDao {
 
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
+    }
+
+    public SubscriptionDao getSubscriptionDao() {
+        return subscriptionDao;
+    }
+
+    public void setSubscriptionDao(SubscriptionDao subscriptionDao) {
+        this.subscriptionDao = subscriptionDao;
+    }
+
+    public JdbcTemplate getJdbcTemplate() {
+        return jdbcTemplate;
+    }
+
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 }
 

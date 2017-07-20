@@ -1,13 +1,11 @@
 package controller;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import dao.ResourceDao;
 import entity.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import service.ResourceService;
@@ -46,6 +44,11 @@ public class ResourceController extends ParentController {
     @RequestMapping(value="/recentshare")
     List<Resource> nrecentshare(){
         return resourceService.nrecentshare(5);
+    }
+
+    @RequestMapping(value="/viewpost/{id}")
+    ModelAndView viewpost(@PathVariable String id){
+        return resourceService.viewpost(id);
     }
 
     //TO prevent site from crashing if user accidently hit the url

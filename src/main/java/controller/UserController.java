@@ -1,23 +1,18 @@
 package controller;
 
-
-import com.mysql.jdbc.PacketTooBigException;
-import dao.UserDao;
 import entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import service.UserService;
 
-import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
 
 
 @Controller
@@ -30,10 +25,10 @@ public class UserController extends ParentController {
     ModelAndView login(@RequestParam String login_user, @RequestParam String login_password, HttpSession session){
         String result=userService.login(login_user,login_password,session);
         if(result==null){
-            return new ModelAndView("dashboard");
+            return new ModelAndView("redirect:/dashboard");
         }
         else{
-            return new ModelAndView("index","error",result);
+            return new ModelAndView("forward:/","error",result);
         }
     }
 
@@ -42,6 +37,7 @@ public class UserController extends ParentController {
                           @RequestParam String email , @RequestParam String username,
                           @RequestParam String password, @RequestParam String confirmPassword,
                           @RequestParam CommonsMultipartFile photo,HttpSession session) {
+
         String result="";
         try {
             result = userService.register(firstname, lastname, email, username, password, confirmPassword, photo, session);
@@ -60,7 +56,13 @@ public class UserController extends ParentController {
     @RequestMapping(value="/logout")
     ModelAndView logout(HttpSession session){
         session.invalidate();
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("forward:/");
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/getUserCount")
+    String getUserCountByType(@RequestParam String type){
+        return userService.getParticularUserCount(type);
     }
 
 
@@ -115,12 +117,38 @@ public class UserController extends ParentController {
         }
     }
 
+    @RequestMapping(value="/profile/{id}")
+    ModelAndView userprofile(@PathVariable String id){
+       return userService.userprofile(id);
+    }
+
+    @RequestMapping(value="/getLimitedUser/")
+    @ResponseBody
+    void getLimitedUser(@RequestParam String offset,@RequestParam String limit,@RequestParam String type,
+                        HttpServletResponse response) throws IOException {
+        List<User> users=userService.getLimitedUser(offset,limit,type);
+        String str=userService.getTableFormat(users);
+        response.getWriter().print(str);
+    }
+
+    @RequestMapping(value="/activateUser/{userid}")
+    ModelAndView activateUser(@PathVariable String userid, HttpSession session){
+        return userService.activateUser(userid,session);
+
+    }
+
+    @RequestMapping(value="/deactivateUser/{userid}")
+    ModelAndView deactivateUser(@PathVariable String userid,HttpSession session){
+        return userService.deactivateUser(userid,session);
+    }
 
     //TO prevent site from crashing if user accidently hit the url
     @RequestMapping(value={"/login","/register"},method= RequestMethod.GET)
     ModelAndView dummy(){
         return new ModelAndView("redirect:/dashboard");
     }
+
+
 
     //SETTER
     public void setUserService(UserService userService) {
