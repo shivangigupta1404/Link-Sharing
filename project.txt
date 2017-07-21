@@ -1,0 +1,37 @@
+forward:	Link does not change , data is forwarded
+redirect	vice versa
+
+
+FROM Topic AS T JOIN Resource as R JOIN Subscription as S
+"WHERE T.createdBy =:userParam"
+"and T.id=R.
+"GROUP BY T.name";
+
+"From Resource R Where R.topic.visibility=:visibilityParam"
+"ORDER BY R.dateCreated DESC"
+
+.setMaxResults(limit);
+
+
+DASHBOARD : 
+
+HOME PAGE : Top post,SEARCH,set image
+TOPIC SHOW : searching within posts, download,mark as read, view post, set visibility of subscroibe , ajax pagination 
+VIEW POST  : post rating, change date format,edit,delete,trending topic
+USER PROFILE : if owner/admin is viewing , searching,mark as read
+USERS PAGE: SORTING,SEARCHING,add class active
+
+
+Display default image
+add accept type to image upload and file
+redirect links properly
+forgot pwd
+send invite
+searching			/search/offline  => pending
+
+
+select *,Q.createdBy_id,(select count(*) from subscription S where S.topic_id=T.id) as subscriptionCount,(select count(*) from resource R where R.topic_id=T.id) as topicCount from topic T WHERE T.id IN (select Q.id from topic Q where Q.createdBy_id=1);
+
+select *,(select count(*) from subscription S where S.topic_id=T.id) as subscriptionCount,(select count(*) from resource R where R.topic_id=T.id) as topicCount from topic T WHERE T.createdBy_id=6
+
+
