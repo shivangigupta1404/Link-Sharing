@@ -2,8 +2,11 @@ package controller;
 
 import dao.ResourceDao;
 import dao.TopicDao;
+import dao.UserDao;
+import dto.UserDto;
 import entity.Resource;
 import entity.Topic;
+import entity.User;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import service.TopicService;
+import service.UserService;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -37,7 +41,7 @@ public class BaseController extends ParentController {
             return new ModelAndView("index","recentshares",resourceList);
         }
         else {
-            return new ModelAndView("redirect:/dashboard");
+            return new ModelAndView("forward:/dashboard");
         }
     }
 
@@ -45,16 +49,6 @@ public class BaseController extends ParentController {
     ModelAndView dashboard(HttpSession session){
         if(session.getAttribute("username")!=null){
             return new ModelAndView("dashboard");
-        }
-        else{
-            return new ModelAndView("forward:/","error","Login To Continue");
-        }
-    }
-
-    @RequestMapping("/editprofile")
-    ModelAndView editprofile(HttpSession session){
-        if(session.getAttribute("username")!=null){
-            return new ModelAndView("EditProfile");
         }
         else{
             return new ModelAndView("forward:/","error","Login To Continue");

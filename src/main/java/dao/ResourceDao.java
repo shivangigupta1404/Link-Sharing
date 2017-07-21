@@ -71,6 +71,19 @@ public class ResourceDao {
         }
     }
 
+
+    @SuppressWarnings("unchecked")
+    public List<Resource> searchPublicByText(String text){
+        openCurrentSessionwithTransaction();
+        String hql="FROM Resource R where R.topic.visibility=0 and R.description LIKE ?";
+        Query query=getSession().createQuery(hql);
+        String parameter="%"+text+"%";
+        query.setParameter(0,parameter);
+        List<Resource> result = (List<Resource>) query.list();
+        closeCurrentSessionwithTransaction();
+        return result;
+    }
+
     //Getter and Setter
     public Session getSession() {
         return session;
@@ -95,5 +108,6 @@ public class ResourceDao {
     public void setFactory(SessionFactory factory) {
         this.factory = factory;
     }
+
 
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
@@ -48,7 +49,7 @@ public class ResourceService {
         return null;
     }
 
-    public String createDocument(CommonsMultipartFile file,String description,String topic, HttpSession session){
+    public String createDocument(CommonsMultipartFile file, String description, String topic, HttpServletRequest request,HttpSession session){
         if(file.isEmpty()){
             return "Please Upload the file";
         }
@@ -59,7 +60,7 @@ public class ResourceService {
             return "Please Select the topic";
         }
 
-        String path=session.getServletContext().getRealPath("/");
+        String path=request.getSession().getServletContext().getRealPath("/");
         System.out.println("context path is : "+path);
         String filename=file.getOriginalFilename();
         try{

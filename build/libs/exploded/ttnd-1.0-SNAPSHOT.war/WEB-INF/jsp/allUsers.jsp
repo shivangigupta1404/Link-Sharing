@@ -24,8 +24,8 @@
                         <option value="active">Active users</option>
                         <option value="inactive">Inactive users</option>
                     </select>
-                    <form id="admin_search_user" method="post" action="#" class="pull-right">
-                        <input type="text" placeholder="Search">
+                    <form id="admin_search_user" method="post" action="/adminSearchUser/" class="pull-right">
+                        <input type="text" placeholder="Search" name="text">
                         <input type="submit" value="Search">
                     </form>
                 </div>

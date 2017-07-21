@@ -40,7 +40,9 @@
                     <div class="panel-body">
                         <div class="container-fluid">
                             <div class="col-xs-3 col-sm-3 about">
-                                <img src="/resources/images/user.jpg" alt="user" class="img-responsive center-block" class="user-img">
+                                <a href="/profile/${topic.createdBy.id}">
+                                    <img src="${pageContext.request.contextPath}/images/${topic.createdBy.id}" alt="user" class="img-responsive center-block" class="user-img">
+                                </a>
                             </div>
                             <div class="col-xs-9 col-sm-9">
                                 <div class="row">
@@ -96,7 +98,9 @@
                             <c:forEach var="user" items="${subscribersList}">
                                 <div class="row">
                                     <div class="col-xs-3 col-sm-3 about">
-                                        <img src="/resources/images/user.jpg" alt="user" class="img-responsive center-block" class="user-img">
+                                        <a href="/profile/${user.id}">
+                                            <img src="${pageContext.request.contextPath}/images/${user.id}" alt="user" class="img-responsive center-block" class="user-img">
+                                        </a>
                                     </div>
                                     <div class="col-xs-9 col-sm-9">
                                         <div class="row">
@@ -143,7 +147,9 @@
                         <c:forEach var="post" items="${postsList}">
                             <div class="msg">
                                 <div class="col-xs-3 col-sm-2">
-                                    <img src="/resources/images/user.jpg" alt="user" class="img-responsive center-block" class="user-img">
+                                    <a href="/profile/${post.createdBy.id}">
+                                        <img src="${pageContext.request.contextPath}/images/${post.createdBy.id}" alt="user" class="img-responsive center-block" class="user-img">
+                                    </a>
                                 </div>
                                 <div class="col-xs-9 col-sm-10">
                                     <p><c:out value="${post.description}"/></p>

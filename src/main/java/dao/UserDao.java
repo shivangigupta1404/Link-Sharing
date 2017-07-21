@@ -15,6 +15,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.jws.soap.SOAPBinding;
 import java.sql.ResultSet;
@@ -54,6 +55,7 @@ public class UserDao {
         closeCurrentSessionwithTransaction();
     }
 
+    @Transactional
     public User findById(int id){
         openCurrentSessionwithTransaction();
         User user=getSession().get(User.class,id);
@@ -180,8 +182,6 @@ public class UserDao {
             return true;
         else
             return false;
-
-
     }
 
     public void update(User entity) {
@@ -221,7 +221,6 @@ public class UserDao {
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
-
 
 }
 

@@ -44,6 +44,13 @@ public class DocumentResourceDao {
         getSession().delete(documentResource);
         closeCurrentSessionwithTransaction();
     }
+
+    public DocumentResource getById(int id) {
+        openCurrentSessionwithTransaction();
+        DocumentResource document=getSession().get(DocumentResource.class,id);
+        closeCurrentSessionwithTransaction();
+        return document;
+    }
     //Getter and setter
 
     public Session getSession() {
@@ -69,4 +76,6 @@ public class DocumentResourceDao {
     public void setFactory(SessionFactory factory) {
         this.factory = factory;
     }
+
+
 }

@@ -1,5 +1,6 @@
 package controller;
 
+import dto.UserDto;
 import entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -58,6 +59,18 @@ public class UserController extends ParentController {
         session.invalidate();
         return new ModelAndView("forward:/");
     }
+
+
+    @RequestMapping("/editprofile")
+    ModelAndView editprofile(HttpSession session){
+        if(session.getAttribute("username")!=null){
+            return userService.editprofile(session);
+        }
+        else{
+            return new ModelAndView("forward:/","error","Login To Continue");
+        }
+    }
+
 
     @ResponseBody
     @RequestMapping(value="/getUserCount")

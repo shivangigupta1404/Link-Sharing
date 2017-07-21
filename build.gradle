@@ -42,5 +42,7 @@ dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.0.5'
     compile group: 'com.fasterxml', name: 'jackson-xml-databind', version: '0.6.2'
     
-    
+    //for sending email
+    compile group: 'javax.mail', name: 'mail', version: '1.4.1'
+    compile group: 'javax.activation', name: 'activation', version: '1.0.2'
 }

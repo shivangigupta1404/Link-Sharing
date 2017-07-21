@@ -3,6 +3,7 @@ package service;
 import dao.ResourceDao;
 import dao.TopicDao;
 import dao.UserDao;
+import dto.TopicDto;
 import dto.UserDto;
 import entity.Resource;
 import entity.User;
@@ -12,6 +13,8 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -90,7 +93,7 @@ public class UserService {
     }
 
     public String register(String firstname,String lastname,String email,String username,
-                           String password,String confirmPassword, CommonsMultipartFile photo,HttpSession session){
+                           String password,String confirmPassword, CommonsMultipartFile photo,HttpSession session) throws IOException {
 
         System.out.println("in register method");
         User user=new User(firstname,lastname,email,username,password);
@@ -102,11 +105,6 @@ public class UserService {
             if(!photo.isEmpty()){
                 byte[] bytes = photo.getBytes();
                 user.setPhoto(bytes);
-/*          System.out.println(user);
-            FileOutputStream outputStream = new FileOutputStream("D:/photo.jpg");
-            outputStream.write(bytes);
-            outputStream.close();
-            */
             }
             try{
                 userDao.save(user);
@@ -216,5 +214,15 @@ public class UserService {
                 str+="no</td><td><a href='/activateUser/"+u.getId()+"'>Activate</td>";
         }
         return str;
+    }
+
+    public ModelAndView editprofile(HttpSession session) {
+        User user=userDao.findByUsername((String) session.getAttribute("username"));
+        UserDto userDto=userDao.getUserDetails(user.getId());
+        List<TopicDto> topicList=topicDao.topicsOfUser(user);
+        ModelAndView mv=new ModelAndView("EditProfile");
+        mv.addObject("user",userDto);
+        mv.addObject("topicList",topicList);
+        return mv;
     }
 }

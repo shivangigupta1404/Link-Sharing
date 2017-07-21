@@ -1,4 +1,4 @@
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix = "c"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -15,7 +15,31 @@
     <div class="container-fluid" id="main-body">
         <div class="row">
             <div class="col-xs-12 col-sm-offset-1 col-sm-4 font-md">
-                <jsp:include page="UserSummary.jsp" />
+                <div class="panel panel-default border-black-1">
+                    <div class="panel-body">
+                        <div class="container-fluid">
+                            <div class="col-xs-3 col-sm-3 about">
+                                    <img src="${pageContext.request.contextPath}/images/${user.id}" alt="user" class="img-responsive center-block">
+                            </div>
+                            <div class="col-xs-9 col-sm-9">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <strong>${user.firstname} ${user.lastname}</strong>
+                                    </div>
+                                    <p class="grey">@${user.username}</p>
+                                    <div class="col-xs-8">
+                                        <div>Subscriptions</div>
+                                        <div>${user.subscriptionCount}</div>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <div>Topics</div>
+                                        <div>${user.topicCount}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="container-fluid">
@@ -27,55 +51,61 @@
                     </div>
                     <div class="panel-body">
                         <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-xs-3 col-sm-3">
-                                    <img src="/resources/images/user.jpg" alt="user" class="img-responsive center-block" class="user-img">
-                                </div>
-                                <div class="col-xs-9 col-sm-9">
-                                    <div class="row">
+                            <c:forEach var="topic" items="${topicList}">
+                                <div class="row">
+                                    <div class="col-xs-3 col-sm-3">
+                                        <img src="${pageContext.request.contextPath}/images/${topic.createdBy.id}" alt="user" class="img-responsive center-block">
+                                    </div>
+                                    <div class="col-xs-9 col-sm-9">
+                                        <div class="row">
                                             <div class="col-xs-12 col-sm-12">
-                                                    <div class="row">
-                                                        <form action="/changetopicname">
-                                                            <div class="form-group col-xs-6">
-                                                                <input type="text" class="form-control" name="email" value="existing name">
-                                                            </div>
-                                                            <div class="col-xs-6">
-                                                                <button type="submit" class="btn btn-default">Save</button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
+                                                <div class="row">
+                                                    <form action="/changetopicname/${topic.id}">
+                                                        <div class="form-group col-xs-6">
+                                                            <input type="text" class="form-control" name="email" value="${topic.name}">
+                                                        </div>
+                                                        <div class="col-xs-6">
+                                                            <button type="submit" class="btn btn-default">Save</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
                                             </div>
                                             <div class="font-sm">
-                                                <div class="col-xs-6 col-sm-6">
-                                                    <div>Subscriptions</div>
-                                                    <div>{{count}}</div>
+                                                <div class="col-xs-4 col-sm-4">
+                                                    <p class="grey"><c:out value="${topic.createdBy.name}"/></p>
                                                 </div>
-                                                <div class="col-xs-6 col-sm-6">
+                                                <div class="col-xs-4 col-sm-4">
+                                                    <div>Subscriptions</div>
+                                                    <div><c:out value="${topic.subscriptionCount}"/></div>
+                                                </div>
+                                                <div class="col-xs-4 col-sm-4">
                                                     <div>Posts</div>
-                                                    <div>{{Count}}</div>
+                                                    <div><c:out value="${topic.postCount}"/></div>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row option-list text-center">
-                                <div>
-                                    <select>
-                                        <option value="Very Serious">Very Serious</option>
-                                        <option value="Casual">Casual</option>
-                                        <option value="Serious">Serious</option>
-                                    </select>
-                                    <select>
-                                        <option value="existing value">existing value</option>
-                                        <option value="Private">Private</option>
-                                        <option value="Public">Public</option>
-                                    </select>
-                                    <span class="option">
+                                <div class="row option-list text-center">
+                                    <div>
+                                        <select>
+                                            <option value="${topic.seriousness}"><c:out value="${topic.seriousness}"/></option>
+                                            <option value="Very Serious">Very Serious</option>
+                                            <option value="Casual">Casual</option>
+                                            <option value="Serious">Serious</option>
+                                        </select>
+                                        <select>
+                                            <option value="${topic.visibility}"><c:out value="${topic.visibility}"/></option>
+                                            <option value="Private">Private</option>
+                                            <option value="Public">Public</option>
+                                        </select>
+                                        <span class="option">
                                         <span  class="glyphicon glyphicon-trash"></span>
                                     </span>
 
+                                    </div>
                                 </div>
-                            </div>
+                            </c:forEach>
                         </div>
                     </div>
                 </div>

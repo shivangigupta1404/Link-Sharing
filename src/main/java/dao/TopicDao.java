@@ -133,9 +133,10 @@ public class TopicDao {
 
     @SuppressWarnings("unchecked")
     public List<TopicDto> topicsOfUser(User user) {
+        int id=user.getId();
         String sql = "select *,(select count(*) from subscription S where S.topic_id=T.id) as subscriptionCount,"+
                 "(select count(*) from resource R where R.topic_id=T.id) as topicCount from topic T "+
-                "WHERE T.id IN (select id from topic where createdBy_id=1)";
+                "WHERE T.id=6";
 
         try {
             List<TopicDto> users=jdbcTemplate.query(sql,new TopicDtoMapper());

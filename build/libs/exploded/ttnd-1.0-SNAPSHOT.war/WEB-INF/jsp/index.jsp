@@ -32,7 +32,9 @@
                 <c:forEach var="resource" items="${recentshares}">
                   <div class="row share">
                     <div class="col-xs-12 col-sm-3">
-                      <img src="/resources/images/user.jpg" alt="user" class="img-responsive center-block" class="user-img">
+                      <a href="/profile/${resource.createdBy.id}">
+                          <img src="${pageContext.request.contextPath}/images/${resource.createdBy.id}" alt="user" class="img-responsive center-block">
+                      </a>
                     </div>
                     <div class="col-xs-12 col-sm-9">
                       <div class="row">
@@ -40,7 +42,6 @@
                           <a href="/profile/${resource.createdBy.id}">
                             <u>
                               <c:out value="${resource.createdBy.firstname}"/>
-                              &nbsp;
                               <c:out value="${resource.createdBy.lastname}"/>
                             </u>
                           </a>
@@ -215,7 +216,7 @@
                     <div class="row">
                       <label class="control-label col-xs-12 col-sm-3" for="photo">Photo</label>
                       <div class="col-xs-6 col-xs-offset-3 col-sm-offset-0 col-sm-8">
-                        <input type="file" id="photo" name="photo"/>
+                        <input type="file" id="photo" name="photo" accept=".jpg,.png,.gif"/>
                         <input type="button" value="Upload image" class="btn btn-default" onclick="document.getElementById('photo').click();" />
                       </div>
                     </div>
@@ -237,6 +238,8 @@
     </div>
   </div>
   </div>
+
+  <div id="search_result"></div>
 
   <script src="/resources/js/jquery.min.js"></script>
   <script src="/resources/js/bootstrap.min.js"></script>
